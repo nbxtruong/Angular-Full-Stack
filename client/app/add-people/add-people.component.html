@@ -1,0 +1,48 @@
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="card">
+  <h4 class="card-header">Add People</h4>
+  <div class="card-block">
+    <form [formGroup]="addPeopleForm" (ngSubmit)="register()">
+      <div class="input-group" [ngClass]="setClassUsername()">
+        <span class="input-group-addon">
+          <i class="fa fa-user"></i>
+        </span>
+        <input class="form-control" type="text" name="username" formControlName="username" placeholder="Username" autofocus>
+      </div>
+      <div class="input-group" [ngClass]="setClassName()">
+        <span class="input-group-addon">
+          <i class="fa fa-envelope"></i>
+        </span>
+        <input class="form-control" type="text" name="name" formControlName="name" placeholder="Email">
+      </div>
+      <div class="input-group" [ngClass]="setClassRoom()">
+        <span class="input-group-addon">
+          <i class="fa fa-key"></i>
+        </span>
+        <input class="form-control" type="text" name="room" formControlName="room" placeholder="Room">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-black-tie"></i>
+        </span>
+        <select class="form-control" name="role" formControlName="role">
+          <option value="" selected disabled>Role</option>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-camera"></i>
+        </span>
+      </div>
+      <div class="float-right float-sm-right float-md-right">
+        <button class="btn" (click)="goBack()">
+          <i class="fa fa-arrow-left"></i> Back</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!addPeopleForm.valid">
+          <i class="fa fa-user-plus"></i> Add</button>
+      </div>
+    </form>
+  </div>
+</div>

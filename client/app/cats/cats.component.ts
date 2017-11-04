@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { CatService } from '../services/cat.service';
 import { ToastComponent } from '../shared/toast/toast.component';
@@ -9,6 +10,11 @@ import { ToastComponent } from '../shared/toast/toast.component';
   templateUrl: './cats.component.html',
   styleUrls: ['./cats.component.scss']
 })
+
+@Pipe({
+  name: 'reverse',
+  pure: false
+})
 export class CatsComponent implements OnInit {
 
   cat = {};
@@ -17,41 +23,36 @@ export class CatsComponent implements OnInit {
   isEditing = false;
 
   addCatForm: FormGroup;
+  username = new FormControl('', Validators.required);
   name = new FormControl('', Validators.required);
-  age = new FormControl('', Validators.required);
-  weight = new FormControl('', Validators.required);
+  room = new FormControl('', Validators.required);
+  role = new FormControl('', Validators.required);
 
   constructor(private catService: CatService,
-              private formBuilder: FormBuilder,
-              public toast: ToastComponent) { }
+    private formBuilder: FormBuilder,
+    public toast: ToastComponent,
+    private router: Router) { }
 
   ngOnInit() {
     this.getCats();
     this.addCatForm = this.formBuilder.group({
+      username: this.username,
       name: this.name,
-      age: this.age,
-      weight: this.weight
+      room: this.room,
+      role: this.role
     });
   }
 
   getCats() {
     this.catService.getCats().subscribe(
-      data => this.cats = data,
+      data => this.cats = data.reverse(),
       error => console.log(error),
       () => this.isLoading = false
     );
   }
 
   addCat() {
-    this.catService.addCat(this.addCatForm.value).subscribe(
-      res => {
-        const newCat = res.json();
-        this.cats.push(newCat);
-        this.addCatForm.reset();
-        this.toast.setMessage('item added successfully.', 'success');
-      },
-      error => console.log(error)
-    );
+    this.router.navigate(['/addPeople']);
   }
 
   enableEditing(cat) {
@@ -88,6 +89,27 @@ export class CatsComponent implements OnInit {
         },
         error => console.log(error)
       );
+    }
+  }
+
+  searchPeopleByName() {
+    // Declare variables 
+    var input, filter, table, tr, td, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
     }
   }
 

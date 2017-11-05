@@ -36,4 +36,8 @@ export class CatService {
     return this.http.delete(`/api/cat/${cat._id}`, this.options);
   }
 
+  uploadCatPhotos(photos): Observable<any> {
+    return this.http.post(``, JSON.stringify(photos), this.options);
+  }
+
 }

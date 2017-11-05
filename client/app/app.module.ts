@@ -17,6 +17,7 @@ import { AccountComponent } from './account/account.component';
 import { AdminComponent } from './admin/admin.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AddPeopleComponent } from './add-people/add-people.component';
+import { WebCamComponent } from 'ack-angular-webcam';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AddPeopleComponent } from './add-people/add-people.component';
     AccountComponent,
     AdminComponent,
     NotFoundComponent,
-    AddPeopleComponent
+    AddPeopleComponent,
+    WebCamComponent
   ],
   imports: [
     RoutingModule,

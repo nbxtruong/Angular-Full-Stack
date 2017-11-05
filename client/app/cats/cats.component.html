@@ -50,10 +50,10 @@
             <button class="btn btn-sm btn-danger" (click)="deleteCat(cat)">
               <i class="fa fa-trash"></i>
             </button>
-            <button class="btn btn-sm btn-info">
+            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#cameraModal">
               <i class="fa fa-camera"></i>
             </button>
-            <button class="btn btn-sm btn-success">
+            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#cameraModal">
               <i class="fa fa-check"></i>
             </button>
           </td>
@@ -80,9 +80,6 @@
                 </select>
               </div>
               <div class="form-group">
-                <i class="fa fa-check" aria-hidden="true"></i>
-              </div>
-              <div class="form-group">
                 <button class="btn btn-sm btn-primary" type="submit" [disabled]="!form.form.valid">
                   <i class="fa fa-floppy-o"></i>
                 </button>
@@ -95,5 +92,32 @@
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal fade" id="cameraModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Camera ({{base64.length}}/20)</h4>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <ack-webcam [(ref)]="webcam" [options]="options" (onSuccess)="onCamSuccess($event)" (onError)="onCamError($event)"></ack-webcam>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button *ngIf="base64.length != 20" type="button" class="btn btn-success" (click)="genBase64()">Take</button>
+        <button *ngIf="base64.length == 20" type="button" class="btn btn-success" data-dismiss="modal">Summit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
   </div>
 </div>

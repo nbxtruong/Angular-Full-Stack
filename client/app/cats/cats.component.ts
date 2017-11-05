@@ -21,12 +21,26 @@ export class CatsComponent implements OnInit {
   cats = [];
   isLoading = true;
   isEditing = false;
+  public webcam;//will be populated by ack-webcam [(ref)]
+  public base64 = [];
 
   addCatForm: FormGroup;
   username = new FormControl('', Validators.required);
   name = new FormControl('', Validators.required);
   room = new FormControl('', Validators.required);
   role = new FormControl('', Validators.required);
+
+  // Options for webcam
+  options = {
+    audio: false,
+    video: true,
+    // width: 500,
+    // height: 500,
+    fallbackMode: 'callback',
+    fallbackSrc: 'jscam_canvas_only.swf',
+    fallbackQuality: 100,
+    cameraType: 'front'
+  }
 
   constructor(private catService: CatService,
     private formBuilder: FormBuilder,
@@ -112,5 +126,34 @@ export class CatsComponent implements OnInit {
       }
     }
   }
+
+  // Start photo prosessing
+  // Base64 Generation
+  genBase64() {
+    this.webcam.getBase64()
+      .then(base => this.base64.push(base))
+      .catch(e => console.error(e))
+  }
+
+  //A pretend process that would post the webcam photo taken
+  postFormData() {
+    for (var index = 0; index < this.base64.length; index++) {
+      this.catService.uploadCatPhotos(this.base64[index]).subscribe(
+        res => {
+          console.log(res);
+          this.base64.length = 0;
+        },
+        error => {
+          console.log(error);
+          this.base64.length = 0;
+        }
+      );
+    }
+  }
+
+  onCamError(err) { }
+
+  onCamSuccess() { }
+  // End photo processing
 
 }

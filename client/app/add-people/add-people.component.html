@@ -3,7 +3,7 @@
 <div class="card">
   <h4 class="card-header">Add People</h4>
   <div class="card-block">
-    <form [formGroup]="addPeopleForm" (ngSubmit)="register()">
+    <form [formGroup]="addPeopleForm" (ngSubmit)="addPeople()">
       <div class="input-group" [ngClass]="setClassUsername()">
         <span class="input-group-addon">
           <i class="fa fa-user"></i>
@@ -14,7 +14,7 @@
         <span class="input-group-addon">
           <i class="fa fa-envelope"></i>
         </span>
-        <input class="form-control" type="text" name="name" formControlName="name" placeholder="Email">
+        <input class="form-control" type="text" name="name" formControlName="name" placeholder="Name">
       </div>
       <div class="input-group" [ngClass]="setClassRoom()">
         <span class="input-group-addon">
@@ -33,7 +33,7 @@
         </select>
       </div>
       <div class="input-group">
-        <span class="input-group-addon">
+        <span class="input-group-addon" data-toggle="modal" data-target="#cameraModal">
           <i class="fa fa-camera"></i>
         </span>
       </div>
@@ -44,5 +44,32 @@
           <i class="fa fa-user-plus"></i> Add</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal fade" id="cameraModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Camera ({{base64.length}}/20)</h4>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <ack-webcam [(ref)]="webcam" [options]="options" (onSuccess)="onCamSuccess($event)" (onError)="onCamError($event)"></ack-webcam>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button *ngIf="base64.length != 20" type="button" class="btn btn-success" (click)="genBase64()">Take</button>
+        <button *ngIf="base64.length == 20" type="button" class="btn btn-success" data-dismiss="modal">Summit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
   </div>
 </div>

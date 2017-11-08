@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 const catSchema = new mongoose.Schema({
+  userid: String,
   username: String,
   name: String,
   room: String,

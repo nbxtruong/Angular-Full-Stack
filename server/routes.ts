@@ -4,7 +4,6 @@ import CatCtrl from './controllers/cat';
 import UserCtrl from './controllers/user';
 import Cat from './models/cat';
 import User from './models/user';
-
 export default function setRoutes(app) {
 
   const router = express.Router();
@@ -28,8 +27,11 @@ export default function setRoutes(app) {
   router.route('/user/:id').get(userCtrl.get);
   router.route('/user/:id').put(userCtrl.update);
   router.route('/user/:id').delete(userCtrl.delete);
-
+  router.route('/face/train/start').post(userCtrl.train);
+  router.route('/face/train/save').post(userCtrl.saveTrained);
+  router.route('/face/image/save/:id').post(userCtrl.saveImage);
+  router.route('/face/identify').post(userCtrl.identify);
+  router.route('/face/image/delete/:id').post(userCtrl.deleteUser);
   // Apply the routes to our application with the prefix /api
   app.use('/api', router);
-
 }

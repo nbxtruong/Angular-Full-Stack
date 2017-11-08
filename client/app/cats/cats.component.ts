@@ -18,17 +18,31 @@ import { ToastComponent } from '../shared/toast/toast.component';
 export class CatsComponent implements OnInit {
 
   cat = {};
+  myCat;
   cats = [];
   isLoading = true;
   isEditing = false;
   public webcam;//will be populated by ack-webcam [(ref)]
-  public base64 = [];
 
   addCatForm: FormGroup;
   username = new FormControl('', Validators.required);
   name = new FormControl('', Validators.required);
   room = new FormControl('', Validators.required);
   role = new FormControl('', Validators.required);
+  searchFilter='userid';
+  identifiedUser;
+  filterModel;
+
+  searchCategory= [{
+    id:'userid',
+    value:'UserID'
+    },{
+    id:'username',
+    value:'Username'
+  },{
+    id:'photo',
+    value:'Photo'
+  }];
 
   // Options for webcam
   options = {
@@ -72,6 +86,7 @@ export class CatsComponent implements OnInit {
   enableEditing(cat) {
     this.isEditing = true;
     this.cat = cat;
+    this.myCat = cat;
   }
 
   cancelEditing() {
@@ -106,7 +121,12 @@ export class CatsComponent implements OnInit {
     }
   }
 
+  getFilter(f){
+    this.searchFilter=f;
+  }
+
   searchPeopleByName() {
+    console.log(this.searchFilter);
     // Declare variables 
     var input, filter, table, tr, td, i;
     input = document.getElementById("myInput");
@@ -116,7 +136,18 @@ export class CatsComponent implements OnInit {
 
     // Loop through all table rows, and hide those who don't match the search query
     for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[1];
+      var tdArray=tr[i].getElementsByTagName("td");
+      //console.log(tdArray);
+      for (var j=0;j<tdArray.length;j++){
+        if (tdArray[j]&&tdArray[j].getAttribute('value')==this.searchFilter){
+          //console.log(tdArray[j].getAttribute('value'));
+          td=tdArray[j];
+          break;
+        }
+      }
+      
+      //td = tr[i].getElementsByTagName("td")[0];
+      //console.log(td);
       if (td) {
         if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
           tr[i].style.display = "";
@@ -131,23 +162,56 @@ export class CatsComponent implements OnInit {
   // Base64 Generation
   genBase64() {
     this.webcam.getBase64()
-      .then(base => this.base64.push(base))
+      .then(base => {
+        this.identifyAndUpdate(base);
+      })
       .catch(e => console.error(e))
   }
 
-  //A pretend process that would post the webcam photo taken
-  postFormData() {
-    for (var index = 0; index < this.base64.length; index++) {
-      this.catService.uploadCatPhotos(this.base64[index]).subscribe(
-        res => {
-          console.log(res);
-          this.base64.length = 0;
-        },
-        error => {
-          console.log(error);
-          this.base64.length = 0;
+  identifyUser(base) {
+    const messageBody = {
+      image64: base,
+      imagename: 'photo' + [0]
+    }
+    this.catService.identifyCatPhotos(messageBody).subscribe(
+      res => {
+        console.log(JSON.parse(res._body));
+        return res._body;
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  identifyAndUpdate(base) {
+    const messageBody = {
+      image64: base,
+      imagename: 'photo' + [0]
+    }
+    this.catService.identifyCatPhotos(messageBody).subscribe(
+      res => {
+        console.log(JSON.parse(res._body));
+        var user=JSON.parse(res._body);
+        if (user.id!=-1) {
+          var filter,input;
+          filter=document.getElementById('filter');
+          input = document.getElementById("myInput");
+          filter.value='userid';
+          input.value=user.id;
+          this.searchPeopleByName();
         }
-      );
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  checkIfPhoto(t){
+    console.log(this.filterModel);
+    if (t=='photo'){
+      console.log("photo filter");
     }
   }
 

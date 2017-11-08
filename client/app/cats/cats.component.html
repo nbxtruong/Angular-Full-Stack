@@ -3,8 +3,7 @@
 <app-toast [message]="toast.message"></app-toast>
 
 <div class="card" *ngIf="!isLoading">
-  <!-- <h4 class="card-header">Current peoples ({{cats.length}})</h4> -->
-  <div class="card-header">
+  <div class="card-header" *ngIf="!isEditing">
     <div class="row">
       <div class="col-md-4 carHeaderTitel">
         <h4>Current peoples ({{cats.length}})</h4>
@@ -13,85 +12,117 @@
         <button class="btn btn-sm btn-primary" (click)="addCat()">
           <i class="fa fa-plus"></i>
         </button>
+        <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#cameraModal">
+          <i class="fa fa-camera"></i>
+        </button>
       </div>
     </div>
-    <input type="text" id="myInput" (keyup)="searchPeopleByName()" placeholder="Search for names..">
+    <div class="row">
+      <div class="col-md-9">
+        <input type="text" id="myInput" (keyup)="searchPeopleByName()" placeholder="Search for names..">
+      </div>
+      <div class="col-md-3">
+        <select id="filter" #searchFilter class="form-control form-control-lg" (change)="getFilter(searchFilter.value)" (click)="checkIfPhoto(searchFilter.value)">
+          <option *ngFor="let cate of searchCategory" [value]="cate.id">
+            {{cate.value}}
+          </option>
+        </select>
+      </div>
+
+    </div>
   </div>
   <div id="myTable" class="card-block">
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>Username</th>
-          <th>Name</th>
-          <th>Room</th>
-          <th>Role</th>
-          <th>Photos</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="cats.length === 0">
-        <tr>
-          <td colspan="6">There are no peoples in the DB. Add a new people below.</td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="!isEditing">
-        <tr *ngFor="let cat of cats">
-          <td>{{cat.username}}</td>
-          <td>{{cat.name}}</td>
-          <td>{{cat.room}}</td>
-          <td>{{cat.role}}</td>
-          <td>
-            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-          </td>
-          <td>
-            <button class="btn btn-sm btn-warning" (click)="enableEditing(cat)">
-              <i class="fa fa-pencil"></i>
-            </button>
-            <button class="btn btn-sm btn-danger" (click)="deleteCat(cat)">
-              <i class="fa fa-trash"></i>
-            </button>
-            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#cameraModal">
-              <i class="fa fa-camera"></i>
-            </button>
-            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#cameraModal">
-              <i class="fa fa-check"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="isEditing">
-        <tr>
-          <td colspan="6">
-            <form class="form-inline" #form="ngForm" (ngSubmit)="editCat(cat)" style="display:inline">
-              <div class="form-group">
+    <div style="overflow-x: auto;">
+      <table class="table table-bordered table-striped">
+        <tbody *ngIf="cats.length === 0">
+          <tr>
+            <td colspan="7">There are no peoples in the DB. Add a new people below.</td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="!isEditing">
+          <tr>
+            <th>UserID</th>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Room</th>
+            <th>Role</th>
+            <th>Photos</th>
+            <th>Actions</th>
+          </tr>
+          <tr *ngFor="let cat of cats">
+            <td value="userid">{{cat.userid}}</td>
+            <td value="username">{{cat.username}}</td>
+            <td value="name">{{cat.name}}</td>
+            <td value="room">{{cat.room}}</td>
+            <td value="role">{{cat.role}}</td>
+            <td>
+              <i class="fa fa-check-square-o" aria-hidden="true"></i>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-warning" (click)="enableEditing(cat)">
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="deleteCat(cat)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="isEditing">
+          <div class="card-block">
+            <form class="" #form="ngForm" (ngSubmit)="editCat(cat)" style="display:inline">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-list-ol"></i>
+                </span>
+                <input class="form-control" type="text" name="userid" [(ngModel)]="cat.userid" placeholder="Userid" required disabled>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-id-card-o"></i>
+                </span>
                 <input class="form-control" type="text" name="username" [(ngModel)]="cat.username" placeholder="Username" required>
               </div>
-              <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-user"></i>
+                </span>
                 <input class="form-control" type="text" name="name" [(ngModel)]="cat.name" placeholder="Name" required>
               </div>
-              <div class="form-group">
-                <input class="form-control" type="text" name="weight" [(ngModel)]="cat.room" placeholder="Room" required>
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-key"></i>
+                </span>
+                <input class="form-control" type="text" name="room" [(ngModel)]="cat.room" placeholder="Room" required>
               </div>
-              <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-black-tie" style="padding:0px"></i>
+                </span>
                 <select class="form-control" name="role" [(ngModel)]="cat.role">
                   <option value="" selected disabled>Role</option>
                   <option value="user">User</option>
                   <option value="admin">Admin</option>
                 </select>
               </div>
-              <div class="form-group">
-                <button class="btn btn-sm btn-primary" type="submit" [disabled]="!form.form.valid">
-                  <i class="fa fa-floppy-o"></i>
+              <div class="input-group">
+                <span class="input-group-addon" data-toggle="modal" data-target="#cameraModal">
+                  <i class="fa fa-camera"></i>
+                </span>
+              </div>
+              <div class="float-right float-sm-right float-md-right">
+                <button class="btn" (click)="cancelEditing()">
+                  <i class="fa fa-arrow-left"> Back</i>
                 </button>
-                <button class="btn btn-sm btn-warning" (click)="cancelEditing()">
-                  <i class="fa fa-times"></i>
+                <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">
+                  <i class="fa fa-floppy-o"> Save</i>
                 </button>
               </div>
             </form>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -103,7 +134,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Camera ({{base64.length}}/20)</h4>
+        <h4 class="modal-title">Camera</h4>
       </div>
 
       <!-- Modal body -->
@@ -113,8 +144,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button *ngIf="base64.length != 20" type="button" class="btn btn-success" (click)="genBase64()">Take</button>
-        <button *ngIf="base64.length == 20" type="button" class="btn btn-success" data-dismiss="modal">Summit</button>
+        <button type="button" class="btn btn-success" (click)="genBase64()">Identify</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
 

@@ -4,15 +4,22 @@
   <h4 class="card-header">Add People</h4>
   <div class="card-block">
     <form [formGroup]="addPeopleForm" (ngSubmit)="addPeople()">
+      <div class="input-group" [ngClass]="setClassUserid()">
+        <span class="input-group-addon">
+          <i class="fa fa-list-ol"></i>
+        </span>
+        <input class="form-control" type="text" name="userid" formControlName="userid" placeholder="Userid" [(ngModel)]="randomUserID"
+          autofocus disabled>
+      </div>
       <div class="input-group" [ngClass]="setClassUsername()">
         <span class="input-group-addon">
-          <i class="fa fa-user"></i>
+          <i class="fa fa-id-card-o"></i>
         </span>
         <input class="form-control" type="text" name="username" formControlName="username" placeholder="Username" autofocus>
       </div>
       <div class="input-group" [ngClass]="setClassName()">
         <span class="input-group-addon">
-          <i class="fa fa-envelope"></i>
+          <i class="fa fa-user"></i>
         </span>
         <input class="form-control" type="text" name="name" formControlName="name" placeholder="Name">
       </div>

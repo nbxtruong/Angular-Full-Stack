@@ -1,0 +1,26 @@
+.size {
+  padding-top: 0.5%;
+  width: fit-content;
+  font-size: 18px;
+}
+
+.boderbutton {
+  border: none;
+}
+
+.bodermenu {
+  border: none;
+}
+
+.navbar-inverse .navbar-toggle:focus,
+.navbar-inverse .navbar-toggle:hover {
+  background-color: unset;
+}
+
+.navbar-inverse .navbar-toggle {
+  border-color: unset;
+}
+
+.container {
+  padding-top: 1%;
+}

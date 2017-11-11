@@ -44,7 +44,6 @@
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^4.12.1",
     "morgan": "^1.9.0",
-    "node-pre-gyp": "^0.6.39",
     "rxjs": "^5.4.2",
     "tether": "1.4.0",
     "zone.js": "^0.8.14"
@@ -60,7 +59,7 @@
     "ack-angular-webcam": "^1.4.0",
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
-    "codelyzer": "~3.2.0",
+    "codelyzer": "^3.2.2",
     "concurrently": "^3.3.0",
     "cookie-parser": "^1.4.3",
     "jasmine-core": "~2.6.2",

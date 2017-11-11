@@ -1,0 +1,8 @@
+diff a/client/styles.scss b/client/styles.scss	(rejected hunks)
+@@ -7,5 +7,4 @@
+ 
+ .input-group {
+   margin-bottom: 15px;
+-}
+\ No newline at end of file
+ }

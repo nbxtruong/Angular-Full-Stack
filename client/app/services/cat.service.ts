@@ -36,9 +36,8 @@ export class CatService {
     return this.http.delete(`/api/cat/${cat._id}`, this.options);
   }
 
-  uploadCatPhotos(photos, username): Observable<any> {
-    return this.http.post(`/api/face/image/save/` + username, photos, this.options);
-    //return this.http.post(`http://192.168.129.52:3000/api/face/image/save/` + username, photos, this.options);
+  uploadCatPhotos(photos, userID): Observable<any> {
+    return this.http.post(`/api/face/image/save/` + userID, photos, this.options);
   }
 
   trainCatPhotos(): Observable<any> {
@@ -51,6 +50,10 @@ export class CatService {
 
   identifyCatPhotos(photos): Observable<any> {
     return this.http.post(`/api/face/identify/`, photos, this.options);
+  }
+
+  deleteCatPhotos(userID): Observable<any> {
+    return this.http.post(`/api/face/image/delete/` + userID, this.options);
   }
 
 }

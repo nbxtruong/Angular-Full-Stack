@@ -1,0 +1,23 @@
+diff a/client/app/app.component.ts b/client/app/app.component.ts	(rejected hunks)
+@@ -1,12 +0,16 @@
+-import { Component } from '@angular/core';
+-import { AuthService } from './services/auth.service';
++import {
++  Component
++} from '@angular/core';
++import {
++  AuthService
++} from './services/auth.service';
+ 
+ @Component({
+   selector: 'app-root',
+-  templateUrl: './app.component.html'
++  templateUrl: './app.component.html',
++  styleUrls: ['./app.component.scss']
+ })
+ export class AppComponent {
+ 
+-  constructor(public auth: AuthService) { }
+-
++  constructor(public auth: AuthService) {}
+ }

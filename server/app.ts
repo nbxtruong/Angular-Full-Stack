@@ -37,6 +37,9 @@ mongodb
     app.use(cookieParser());
     setRoutes(app);
     
+    app.get('/*', function(req, res) {
+      res.sendFile(path.join(__dirname, '../public/index.html'));
+    });
     if (!module.parent) {
       app.listen(app.get('port'), () => {
         console.log('Angular Full Stack listening on port ' + app.get('port'));

@@ -22,6 +22,7 @@ export class CatsComponent implements OnInit {
   cats = [];
   isLoading = true;
   isEditing = false;
+  catToDelete;
   public webcam;//will be populated by ack-webcam [(ref)]
 
   addCatForm: FormGroup;
@@ -39,6 +40,12 @@ export class CatsComponent implements OnInit {
     },{
     id:'username',
     value:'Username'
+  },{
+    id:'name',
+    value:'Name'
+  },{
+    id:'room',
+    value:'Room'
   },{
     id:'photo',
     value:'Photo'
@@ -108,17 +115,23 @@ export class CatsComponent implements OnInit {
     );
   }
 
+  setDeleteCat(cat){
+    this.catToDelete=cat;
+  }
+
   deleteCat(cat) {
-    if (window.confirm('Are you sure you want to permanently delete this item?')) {
       this.catService.deleteCat(cat).subscribe(
         res => {
           const pos = this.cats.map(elem => elem._id).indexOf(cat._id);
           this.cats.splice(pos, 1);
-          this.toast.setMessage('item deleted successfully.', 'success');
+          this.catService.deleteCatPhotos(cat.userid).subscribe(
+            res =>{
+              this.toast.setMessage('item deleted successfully.', 'success');
+            }
+          )
         },
         error => console.log(error)
       );
-    }
   }
 
   getFilter(f){
@@ -127,7 +140,7 @@ export class CatsComponent implements OnInit {
 
   searchPeopleByName() {
     console.log(this.searchFilter);
-    // Declare variables 
+    // Declare variables
     var input, filter, table, tr, td, i;
     input = document.getElementById("myInput");
     filter = input.value.toUpperCase();
@@ -145,7 +158,7 @@ export class CatsComponent implements OnInit {
           break;
         }
       }
-      
+
       //td = tr[i].getElementsByTagName("td")[0];
       //console.log(td);
       if (td) {
@@ -160,7 +173,7 @@ export class CatsComponent implements OnInit {
 
   // Start photo prosessing
   // Base64 Generation
-  genBase64() {
+  identify() {
     this.webcam.getBase64()
       .then(base => {
         this.identifyAndUpdate(base);
@@ -193,12 +206,19 @@ export class CatsComponent implements OnInit {
       res => {
         console.log(JSON.parse(res._body));
         var user=JSON.parse(res._body);
-        if (user.id!=-1) {
+        if (user.id!=-1&&user.conf>60) {
           var filter,input;
           filter=document.getElementById('filter');
           input = document.getElementById("myInput");
           filter.value='userid';
           input.value=user.id;
+          this.searchPeopleByName();
+        } else{
+          var filter,input;
+          filter=document.getElementById('filter');
+          input = document.getElementById("myInput");
+          filter.value='userid';
+          input.value='*';
           this.searchPeopleByName();
         }
       },

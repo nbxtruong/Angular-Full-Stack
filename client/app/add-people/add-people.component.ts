@@ -32,6 +32,10 @@ export class AddPeopleComponent implements OnInit {
 
   public webcam; //will be populated by ack-webcam [(ref)]
   public base64 = [];
+  isLoading = false;
+  photoLimit = 40;
+  takePhoto=false;
+  countPhoto = 0;
 
   addPeopleForm: FormGroup;
   userid = new FormControl('', []);
@@ -108,20 +112,28 @@ export class AddPeopleComponent implements OnInit {
     };
   }
 
+  isValidForm(){
+    if (!this.addPeopleForm.invalid&&this.base64.length>0){
+      return true;
+    }
+    else
+      return false;
+  }
+
   addPeople() {
+    this.isLoading = true;
     this.catService.addCat(this.addPeopleForm.value).subscribe(
       res => {
         this.toast.setMessage('you successfully added!', 'success');
         this.router.navigate(['/cats']);
+        this.postPhotoData();
+        // this.startTrainPhotos();
+        // this.saveTrainPhotos();
       },
       error => {
         this.toast.setMessage('Username already exists', 'danger');
       }
     );
-    this.postFormData();
-    this.startTrainPhotos();
-    this.saveTrainPhotos();
-
   }
 
   startTrainPhotos() {
@@ -162,10 +174,33 @@ export class AddPeopleComponent implements OnInit {
   // Start photo prosessing
   // Base64 Generation
   genBase64() {
+    console.log("Taking photos");
+    console.log(this.countPhoto);
     this.webcam.getBase64()
-      .then(base => this.base64.push(base))
+      .then(base => {
+        this.countPhoto++;
+        this.base64.push(base);
+        if (this.takePhoto&&this.countPhoto < this.photoLimit)
+          setTimeout(() => {
+            this.genBase64();
+          }, 400);
+      })
       .catch(e => console.error(e))
     // this.paramet=;
+  }
+
+  autoTakePhoto() {
+    this.takePhoto=true;
+    this.genBase64();
+  }
+
+  stopTakingPhoto(){
+    this.takePhoto=false;
+  }
+
+  closeCamera(){
+    this.takePhoto=false;
+    this.base64.length = 0;
   }
 
   //A pretend process that would post the webcam photo taken
@@ -188,6 +223,35 @@ export class AddPeopleComponent implements OnInit {
         }
       );
     }
+  }
+  
+  postPhotoData(){
+    console.log(this.base64.length);
+    if (this.base64.length==0){
+      return;
+    }
+    var catJson = this.addPeopleForm.value;
+    const messageBody = {
+      image64: this.base64[0],
+      imagename: 'photo' + [0]
+    }
+    this.catService.uploadCatPhotos(messageBody, catJson.userid).subscribe(
+      res => {
+        console.log(res);
+        this.base64.shift();
+        this.postPhotoData();
+      },
+      error => {
+        console.log(error);
+        this.base64.shift();
+        this.postPhotoData();
+      }
+    );
+  }
+
+  resetPhotoArray(){
+    this.base64.length=0;
+    this.countPhoto=0;
   }
 
   onCamError(err) { }

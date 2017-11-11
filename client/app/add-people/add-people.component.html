@@ -1,6 +1,8 @@
 <app-toast [message]="toast.message"></app-toast>
 
-<div class="card">
+<app-loading [condition]="isLoading"></app-loading>
+
+<div class="card" *ngIf="!isLoading">
   <h4 class="card-header">Add People</h4>
   <div class="card-block">
     <form [formGroup]="addPeopleForm" (ngSubmit)="addPeople()">
@@ -47,7 +49,7 @@
       <div class="float-right float-sm-right float-md-right">
         <button class="btn" (click)="goBack()">
           <i class="fa fa-arrow-left"></i> Back</button>
-        <button class="btn btn-primary" type="submit" [disabled]="!addPeopleForm.valid">
+        <button class="btn btn-primary" type="submit" [disabled]="!isValidForm()">
           <i class="fa fa-user-plus"></i> Add</button>
       </div>
     </form>
@@ -62,7 +64,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Camera ({{base64.length}}/20)</h4>
+        <h4 class="modal-title">Camera ({{base64.length}}/{{photoLimit}})</h4>
       </div>
 
       <!-- Modal body -->
@@ -72,11 +74,15 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button *ngIf="base64.length != 20" type="button" class="btn btn-success" (click)="genBase64()">Take</button>
-        <button *ngIf="base64.length == 20" type="button" class="btn btn-success" data-dismiss="modal">Summit</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button *ngIf="base64.length != photoLimit && !takePhoto" type="button" class="btn btn-success" (click)="autoTakePhoto()">Take</button>
+        <button *ngIf="base64.length != photoLimit && !takePhoto" type="button" class="btn btn-danger" (click)="resetPhotoArray()">Reset</button>
+        <!-- <button *ngIf="base64.length == photoLimit" type="button" class="btn btn-success" data-dismiss="modal">Summit</button> -->
+        <button *ngIf="takePhoto" type="button" class="btn btn-success" (click)="stopTakingPhoto()">Stop</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="stopTakingPhoto()">Close</button>
       </div>
 
     </div>
   </div>
 </div>
+
+

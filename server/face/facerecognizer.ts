@@ -60,7 +60,7 @@ class FaceRecognizer {
         console.log("reading raw input");
         ptr.getInputImages();
       }
-    },5000);
+    },50000);
   }
   checkServerFolder(){
     if(!fs.existsSync("./server/images"))

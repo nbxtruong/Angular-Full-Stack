@@ -12,14 +12,12 @@ import { ToastComponent } from '../shared/toast/toast.component';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
-  email = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3),
-    Validators.maxLength(100)
+  username = new FormControl('', [
+    Validators.required
   ]);
   password = new FormControl('', [
     Validators.required,
-    Validators.minLength(6)
+    Validators.minLength(8)
   ]);
 
   constructor(private auth: AuthService,
@@ -32,13 +30,13 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/']);
     }
     this.loginForm = this.formBuilder.group({
-      email: this.email,
+      username: this.username,
       password: this.password
     });
   }
 
-  setClassEmail() {
-    return { 'has-danger': !this.email.pristine && !this.email.valid };
+  setClassUsername() {
+    return { 'has-danger': !this.username.pristine && !this.username.valid };
   }
   setClassPassword() {
     return { 'has-danger': !this.password.pristine && !this.password.valid };

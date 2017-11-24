@@ -14,7 +14,7 @@ export class AuthService {
   currentUser = { _id: '', username: '', role: '' };
 
   constructor(private userService: UserService,
-              private router: Router) {
+    private router: Router) {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedUser = this.decodeUserFromToken(token);
@@ -25,6 +25,7 @@ export class AuthService {
   login(emailAndPassword) {
     return this.userService.login(emailAndPassword).map(res => res.json()).map(
       res => {
+        console.log(res);
         localStorage.setItem('token', res.token);
         const decodedUser = this.decodeUserFromToken(res.token);
         this.setCurrentUser(decodedUser);

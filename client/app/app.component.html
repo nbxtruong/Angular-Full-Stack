@@ -22,6 +22,11 @@
             </a>
           </li>
           <li>
+            <a routerLink="/doors" class="nav-item nav-link" routerLinkActive="active" *ngIf="auth.loggedIn && auth.isAdmin">
+              <i class="fa fa-microchip"></i> Doors Management
+            </a>
+          </li>
+          <li>
             <a routerLink="/login" class="nav-item nav-link" routerLinkActive="active" *ngIf="!auth.loggedIn">
               <i class="fa fa-sign-in"></i> Login
             </a>

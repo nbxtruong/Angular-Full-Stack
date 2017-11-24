@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ToastComponent } from '../shared/toast/toast.component';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
+import { CatService } from '../services/cat.service';
+import { DoorService } from '../services/door.service';
 
 @Component({
   selector: 'app-admin',
@@ -15,7 +17,9 @@ export class AdminComponent implements OnInit {
 
   constructor(public auth: AuthService,
               public toast: ToastComponent,
-              private userService: UserService) { }
+              private userService: UserService,
+              private catService: CatService,
+              private doorService: DoorService) { }
 
   ngOnInit() {
     this.getUsers();
@@ -34,6 +38,22 @@ export class AdminComponent implements OnInit {
       data => this.toast.setMessage('user deleted successfully.', 'success'),
       error => console.log(error),
       () => this.getUsers()
+    );
+  }
+
+  createGroup(groupID, groupName, groupDescription) {
+    var messageBody = {
+      "name": groupName,
+      "userData": groupDescription
+    }
+
+    this.catService.createPersonGroup(groupID, messageBody).subscribe(
+      res => {
+        console.log(res);
+      },
+      error => {
+        console.log(error);
+      }
     );
   }
 

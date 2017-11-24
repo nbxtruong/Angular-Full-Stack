@@ -1,14 +1,17 @@
 import * as express from 'express';
 
 import CatCtrl from './controllers/cat';
+import DoorCtrl from './controllers/door';
 import UserCtrl from './controllers/user';
 import Cat from './models/cat';
+import Door from './models/door';
 import User from './models/user';
 export default function setRoutes(app) {
 
   const router = express.Router();
 
   const catCtrl = new CatCtrl();
+  const doorCtrl = new DoorCtrl();
   const userCtrl = new UserCtrl();
 
   // Cats
@@ -18,7 +21,13 @@ export default function setRoutes(app) {
   router.route('/cat/:id').get(catCtrl.get);
   router.route('/cat/:id').put(catCtrl.update);
   router.route('/cat/:id').delete(catCtrl.delete);
-
+  // Door
+  router.route('/doors').get(doorCtrl.getAll);
+  router.route('/doors/count').get(doorCtrl.count);
+  router.route('/door').post(doorCtrl.insert);
+  router.route('/door/:id').get(doorCtrl.get);
+  router.route('/door/:id').put(doorCtrl.update);
+  router.route('/deleteDoor/:id').put(doorCtrl.deleteDoor);
   // Users
   router.route('/login').post(userCtrl.login);
   router.route('/users').get(userCtrl.getAll);

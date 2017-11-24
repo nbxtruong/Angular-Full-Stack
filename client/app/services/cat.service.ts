@@ -10,6 +10,12 @@ export class CatService {
   private headers = new Headers({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
   private options = new RequestOptions({ headers: this.headers });
 
+  private azureHeaders = new Headers({ 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': '4507f37ae85244359805ad1566e05a3f' });
+  private azureOptions = new RequestOptions({ headers: this.azureHeaders });
+
+  private azureHeaders2 = new Headers({ 'Content-Type': 'application/json', 'Ocp-Apim-Subscription-Key': '4507f37ae85244359805ad1566e05a3f' });
+  private azureOptions2 = new RequestOptions({ headers: this.azureHeaders2 });
+
   constructor(private http: Http) { }
 
   getCats(): Observable<any> {
@@ -54,6 +60,14 @@ export class CatService {
 
   deleteCatPhotos(userID): Observable<any> {
     return this.http.post(`/api/face/image/delete/` + userID, this.options);
+  }
+
+  detectFacePhoto(photoFormData): Observable<any> {
+    return this.http.post(`https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect`, photoFormData.get('file'), this.azureOptions);
+  }
+
+  createPersonGroup(groupID, messageBody): Observable<any> {
+    return this.http.put('https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/' + groupID, messageBody, this.azureOptions2);
   }
 
 }

@@ -1,0 +1,55 @@
+<app-toast [message]="toast.message"></app-toast>
+
+<app-loading [condition]="isLoading"></app-loading>
+
+<div class="card" *ngIf="!isLoading">
+  <h4 class="card-header">Add Door</h4>
+  <div class="card-block">
+    <form [formGroup]="addDoorForm" (ngSubmit)="addDoor()">
+      <div class="input-group">
+        Lab
+        <select class="form-control hs" name="lab" formControlName="lab">
+          <option value="" selected disabled>Select Lab</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+      <div class="input-group">
+        Block
+        <select class="form-control hs" name="block" formControlName="block">
+          <option value="" selected disabled>Select Block</option>
+          <option value="None">None Selected</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+        </select>
+      </div>
+      <div class="input-group" [ngClass]="setClassFloor()">
+        Floor
+          <input class="form-control" type="text" name="floor" formControlName="floor" placeholder="Floor">
+        </div>
+        <div class="input-group" [ngClass]="setClassDoor()">
+        Door
+        <input class="form-control" type="text" name="door" formControlName="door" placeholder="Door">
+      </div>
+      <div class="input-group">
+        Status
+        <input class="form-control" type="text" name="status" formControlName="status" [(ngModel)]="statusDoor" autofocus disabled>
+      </div>
+      <div class="input-group" [ngClass]="setClassMac()">
+        MAC
+        <input class="form-control" type="text" name="mac" formControlName="mac" placeholder="Mac">
+      </div>
+      <div class="float-right float-sm-right float-md-right">
+        <button class="btn" (click)="goBack()">
+          <i class="fa fa-arrow-left"></i> Back</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!addDoorForm.valid">
+          <i class="fa fa-user-plus"></i> Add</button>
+      </div>
+    </form>
+  </div>
+</div>

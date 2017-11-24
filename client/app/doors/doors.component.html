@@ -1,0 +1,184 @@
+<app-loading [condition]="isLoading"></app-loading>
+
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="card" *ngIf="!isLoading">
+  <div class="card-header" *ngIf="!isEditing">
+    <div class="container">
+      <table>
+        <tr>
+          <td class="carHeadertitle">
+            <h4>Current devices</h4>
+          </td>
+          <td class="carHeaderbutton">
+            <button class="btn btn-sm btn-primary" (click)="addDoor()">
+              <i class="fa fa-plus"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+      <input type="text" id="myInput" (keyup)="searchPeopleByName()" placeholder="Search..">
+    </div>
+  </div>
+  <div id="myTable" class="card-block">
+    <div style="overflow-x: auto;">
+      <table class="table table-bordered table-striped">
+        <tbody *ngIf="doors.length === 0">
+          <tr>
+            <td colspan="8">There are no peoples in the DB. Add a new people below.</td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="!isEditing">
+          <tr>
+            <th>No.</th>
+            <th>Lab</th>
+            <th>Block</th>
+            <th>Floor</th>
+            <th>Door</th>
+            <th>Status</th>
+            <th>MAC</th>
+            <th>Option</th>
+          </tr>
+          <tr *ngFor="let door of doors; let i = index" [hidden]="door.isDeleted">
+            <td value="no">{{i+1}}</td>
+            <td value="lab">{{door.lab}}</td>
+            <td value="block">{{door.block}}</td>
+            <td value="floor">{{door.floor}}</td>
+            <td class="p" value="door">{{door.door}}</td>
+            <td value="status">{{door.status}}</td>
+            <td value="mac">{{door.mac}}</td>
+            <td>
+              <button class="btn btn-sm btn-warning" (click)="enableEditing(door)">
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" [disabled]="!isStatusDoor(door)" (click)="setDeleteDoor(door)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <!-- <tbody *ngIf="isEditing">
+          <div class="card-block">
+            <form class="" #form="ngForm" (ngSubmit)="editDoor(door)" style="display:inline">
+              Lab
+              <div class="form-group">
+                <select class="form-control hs" name="lab" [(ngModel)]="door.lab">
+                  <option value="" selected disabled>Select Lab</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+              Block
+              <div class="form-group">
+                <select class="form-control hs" name="block" [(ngModel)]="door.block">
+                  <option value="" selected disabled>Select Block</option>
+                  <option value="None">None Selected</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                </select>
+              </div>
+              Floor
+              <div class="form-group">
+                  <input class="form-control" type="text" name="floor" [(ngModel)]="door.floor" placeholder="Floor" required>
+                </div>
+              Door
+              <div class="form-group">
+                <input class="form-control" type="text" name="door" [(ngModel)]="door.door" placeholder="Door" required>
+              </div>
+              Status
+              <div class="form-group">
+                <input class="form-control" type="text" name="status" [(ngModel)]="door.status" placeholder="Status" disabled>
+              </div>
+              MAC
+              <div class="form-group">
+                <input class="form-control" type="text" name="mac" [(ngModel)]="door.mac" placeholder="Mac" required>
+              </div>
+              <button class="btn btn-sm btn-primary" type="submit" [disabled]="!form.form.valid">
+                <i class="fa fa-floppy-o"></i> Save</button>
+              <button class="btn btn-sm btn-warning" (click)="cancelEditing()">
+                <i class="fa fa-times"></i> Cancel</button>
+            </form>
+          </div>
+        </tbody> -->
+
+        <div *ngIf="isEditing">
+          <h4 class="card-header">Edit Door</h4>
+          <div class="card-block">
+            <form [formGroup]="addDoorForm" (ngSubmit)="editDoor(formDoor)">
+              <div class="input-group">
+                Lab
+                <select class="form-control hs" name="lab" formControlName="lab" [(ngModel)]="formDoor.lab">
+                  <option value="" selected disabled>Select Lab</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+              <div class="input-group">
+                Block
+                <select class="form-control hs" name="block" formControlName="block" [(ngModel)]="formDoor.block">
+                  <option value="" selected disabled>Select Block</option>
+                  <option value="None">None Selected</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                </select>
+              </div>
+              <div class="input-group" [ngClass]="setClassFloor()">
+                Floor
+                <input class="form-control" type="text" name="floor" formControlName="floor" placeholder="Floor" [(ngModel)]="formDoor.floor">
+              </div>
+              <div class="input-group" [ngClass]="setClassDoor()">
+                Door
+                <input class="form-control" type="text" name="door" formControlName="door" placeholder="Door" [(ngModel)]="formDoor.door">
+              </div>
+              <div class="input-group">
+                Status
+                <input class="form-control" type="text" name="status" formControlName="status" autofocus disabled [(ngModel)]="formDoor.status">
+              </div>
+              <div class="input-group" [ngClass]="setClassMac()">
+                MAC
+                <input class="form-control" type="text" name="mac" formControlName="mac" placeholder="Mac" [(ngModel)]="formDoor.mac">
+              </div>
+              <div class="float-right float-sm-right float-md-right">
+                <button class="btn" (click)="cancelEditing()">
+                  <i class="fa fa-arrow-left"></i>Cancel</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!addDoorForm.valid">
+                  <i class="fa fa-user-plus"></i> Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm modal-->
+<div class="modal fade" id="confirmModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this employee</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteDoor(doorToDelete)">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

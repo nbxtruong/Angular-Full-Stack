@@ -1,6 +1,7 @@
 import { Component, OnInit, Pipe } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { CatService } from '../services/cat.service';
 import { ToastComponent } from '../shared/toast/toast.component';
@@ -16,7 +17,7 @@ import { ToastComponent } from '../shared/toast/toast.component';
   pure: false
 })
 export class CatsComponent implements OnInit {
-
+  
   cat = {};
   myCat;
   cats = [];
@@ -24,31 +25,33 @@ export class CatsComponent implements OnInit {
   isEditing = false;
   catToDelete;
   public webcam;//will be populated by ack-webcam [(ref)]
+  PhotoTest;
+  public base64;
 
   addCatForm: FormGroup;
   username = new FormControl('', Validators.required);
   name = new FormControl('', Validators.required);
   room = new FormControl('', Validators.required);
   role = new FormControl('', Validators.required);
-  searchFilter='userid';
+  searchFilter = 'userid';
   identifiedUser;
   filterModel;
 
-  searchCategory= [{
-    id:'userid',
-    value:'UserID'
-    },{
-    id:'username',
-    value:'Username'
-  },{
-    id:'name',
-    value:'Name'
-  },{
-    id:'room',
-    value:'Room'
-  },{
-    id:'photo',
-    value:'Photo'
+  searchCategory = [{
+    id: 'userid',
+    value: 'UserID'
+  }, {
+    id: 'username',
+    value: 'Username'
+  }, {
+    id: 'name',
+    value: 'Name'
+  }, {
+    id: 'room',
+    value: 'Room'
+  }, {
+    id: 'photo',
+    value: 'Photo'
   }];
 
   // Options for webcam
@@ -66,7 +69,9 @@ export class CatsComponent implements OnInit {
   constructor(private catService: CatService,
     private formBuilder: FormBuilder,
     public toast: ToastComponent,
-    private router: Router) { }
+    private router: Router,
+    private http: Http,
+    private requestOptions: RequestOptions) { }
 
   ngOnInit() {
     this.getCats();
@@ -115,27 +120,27 @@ export class CatsComponent implements OnInit {
     );
   }
 
-  setDeleteCat(cat){
-    this.catToDelete=cat;
+  setDeleteCat(cat) {
+    this.catToDelete = cat;
   }
 
   deleteCat(cat) {
-      this.catService.deleteCat(cat).subscribe(
-        res => {
-          const pos = this.cats.map(elem => elem._id).indexOf(cat._id);
-          this.cats.splice(pos, 1);
-          this.catService.deleteCatPhotos(cat.userid).subscribe(
-            res =>{
-              this.toast.setMessage('item deleted successfully.', 'success');
-            }
-          )
-        },
-        error => console.log(error)
-      );
+    this.catService.deleteCat(cat).subscribe(
+      res => {
+        const pos = this.cats.map(elem => elem._id).indexOf(cat._id);
+        this.cats.splice(pos, 1);
+        this.catService.deleteCatPhotos(cat.userid).subscribe(
+          res => {
+            this.toast.setMessage('item deleted successfully.', 'success');
+          }
+        )
+      },
+      error => console.log(error)
+    );
   }
 
-  getFilter(f){
-    this.searchFilter=f;
+  getFilter(f) {
+    this.searchFilter = f;
   }
 
   searchPeopleByName() {
@@ -149,12 +154,12 @@ export class CatsComponent implements OnInit {
 
     // Loop through all table rows, and hide those who don't match the search query
     for (i = 0; i < tr.length; i++) {
-      var tdArray=tr[i].getElementsByTagName("td");
+      var tdArray = tr[i].getElementsByTagName("td");
       //console.log(tdArray);
-      for (var j=0;j<tdArray.length;j++){
-        if (tdArray[j]&&tdArray[j].getAttribute('value')==this.searchFilter){
+      for (var j = 0; j < tdArray.length; j++) {
+        if (tdArray[j] && tdArray[j].getAttribute('value') == this.searchFilter) {
           //console.log(tdArray[j].getAttribute('value'));
-          td=tdArray[j];
+          td = tdArray[j];
           break;
         }
       }
@@ -178,6 +183,28 @@ export class CatsComponent implements OnInit {
       .then(base => {
         this.identifyAndUpdate(base);
       })
+      .catch(e => console.error(e))
+  }
+
+  indentifyByAzure() {
+    this.webcam.captureAsFormData({ fileName: 'Image.png', mime: this.base64 })
+      .then(formData => {
+        console.log(formData.getAll('file'));
+        this.catService.detectFacePhoto(formData).subscribe(
+          res => {
+            console.log(res);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+      })
+      .catch(e => console.error(e))
+  }
+
+  genBase64() {
+    this.webcam.getBase64()
+      .then(base => this.base64 = base)
       .catch(e => console.error(e))
   }
 
@@ -205,20 +232,20 @@ export class CatsComponent implements OnInit {
     this.catService.identifyCatPhotos(messageBody).subscribe(
       res => {
         console.log(JSON.parse(res._body));
-        var user=JSON.parse(res._body);
-        if (user.id!=-1&&user.conf>60) {
-          var filter,input;
-          filter=document.getElementById('filter');
+        var user = JSON.parse(res._body);
+        if (user.id != -1 && user.conf > 60) {
+          var filter, input;
+          filter = document.getElementById('filter');
           input = document.getElementById("myInput");
-          filter.value='userid';
-          input.value=user.id;
+          filter.value = 'userid';
+          input.value = user.id;
           this.searchPeopleByName();
-        } else{
-          var filter,input;
-          filter=document.getElementById('filter');
+        } else {
+          var filter, input;
+          filter = document.getElementById('filter');
           input = document.getElementById("myInput");
-          filter.value='userid';
-          input.value='*';
+          filter.value = 'userid';
+          input.value = '*';
           this.searchPeopleByName();
         }
       },
@@ -228,9 +255,9 @@ export class CatsComponent implements OnInit {
     );
   }
 
-  checkIfPhoto(t){
+  checkIfPhoto(t) {
     console.log(this.filterModel);
-    if (t=='photo'){
+    if (t == 'photo') {
       console.log("photo filter");
     }
   }

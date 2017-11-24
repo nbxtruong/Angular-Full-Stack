@@ -6,7 +6,8 @@ import { ToastComponent } from '../shared/toast/toast.component';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
 
@@ -29,6 +30,9 @@ export class RegisterComponent implements OnInit {
   role = new FormControl('', [
     Validators.required
   ]);
+  database = new FormControl('', [
+    Validators.required
+  ]);
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
@@ -37,6 +41,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
+      database: this.database,
       username: this.username,
       email: this.email,
       password: this.password,
@@ -57,6 +62,7 @@ export class RegisterComponent implements OnInit {
   register() {
     this.userService.register(this.registerForm.value).subscribe(
       res => {
+        console.log(res);
         this.toast.setMessage('you successfully registered!', 'success');
         this.router.navigate(['/login']);
       },

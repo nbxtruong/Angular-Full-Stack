@@ -45,7 +45,8 @@ export class RegisterComponent implements OnInit {
       username: this.username,
       email: this.email,
       password: this.password,
-      role: this.role
+      role: this.role,
+      isDeleted: false
     });
   }
 
@@ -60,6 +61,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    console.log(this.registerForm.value);
     this.userService.register(this.registerForm.value).subscribe(
       res => {
         console.log(res);

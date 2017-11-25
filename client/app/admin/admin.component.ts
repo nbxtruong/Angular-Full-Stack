@@ -27,14 +27,16 @@ export class AdminComponent implements OnInit {
 
   getUsers() {
     this.userService.getUsers().subscribe(
-      data => this.users = data,
+      data => {this.users = data; console.log(data)},
       error => console.log(error),
       () => this.isLoading = false
     );
   }
 
   deleteUser(user) {
-    this.userService.deleteUser(user).subscribe(
+    user.isDeleted = true;
+    console.log(user);
+    this.userService.softDeleteUser(user, this.auth.currentUser).subscribe(
       data => this.toast.setMessage('user deleted successfully.', 'success'),
       error => console.log(error),
       () => this.getUsers()

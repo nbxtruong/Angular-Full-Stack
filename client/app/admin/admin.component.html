@@ -21,7 +21,7 @@
           </tr>
         </tbody>
         <tbody>
-          <tr *ngFor="let user of users">
+          <tr *ngFor="let user of users" [hidden]="user.isDeleted">
             <td>{{user.username}}</td>
             <td>{{user.email}}</td>
             <td>{{user.role}}</td>

@@ -35,6 +35,7 @@ export default function setRoutes(app) {
   router.route('/user').post(userCtrl.insert);
   router.route('/user/:id').get(userCtrl.get);
   router.route('/user/:id').put(userCtrl.update);
+  router.route('/softDeleteUser/:id').put(userCtrl.softDelete);
   router.route('/user/:id').delete(userCtrl.delete);
   router.route('/face/train/start').post(userCtrl.train);
   router.route('/face/train/save').post(userCtrl.saveTrained);

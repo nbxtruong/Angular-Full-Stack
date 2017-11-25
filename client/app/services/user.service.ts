@@ -44,4 +44,8 @@ export class UserService {
     return this.http.delete(`/api/user/${user._id}`, this.options);
   }
 
+  softDeleteUser(user, currentUser): Observable<any> {
+    return this.http.put(`/api/softDeleteUser/${user._id}`, JSON.stringify(currentUser), this.options);
+  }
+
 }

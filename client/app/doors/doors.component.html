@@ -8,7 +8,7 @@
       <table>
         <tr>
           <td class="carHeadertitle">
-            <h4>Current devices</h4>
+            <h4>Current devices ({{doors.length}})</h4>
           </td>
           <td class="carHeaderbutton">
             <button class="btn btn-sm btn-primary" (click)="addDoor()">
@@ -17,12 +17,22 @@
           </td>
         </tr>
       </table>
-      <input type="text" id="myInput" (keyup)="searchPeopleByName()" placeholder="Search..">
+      <input class="form-control" type="text" id="myInput" placeholder="Search.." (keyup)="searchDoors()">
     </div>
   </div>
-  <div id="myTable" class="card-block">
+  <div class="card-block">
     <div style="overflow-x: auto;">
-      <table class="table table-bordered table-striped">
+      <table id="sortDoor" class="table table-bordered table-striped">
+        <thead *ngIf="!isEditing">
+            <th onclick="sortTable(0)">No.</th>
+            <th onclick="sortTable(1)">Lab</th>
+            <th onclick="sortTable(2)">Block</th>
+            <th onclick="sortTable(3)">Floor</th>
+            <th onclick="sortTable(4)">Door</th>
+            <th onclick="sortTable(5)">Status</th>
+            <th>MAC</th>
+            <th>Option</th>
+        </thead>
         <tbody *ngIf="doors.length === 0">
           <tr>
             <td colspan="8">There are no peoples in the DB. Add a new people below.</td>

@@ -14,6 +14,8 @@ export class AdminComponent implements OnInit {
 
   users = [];
   isLoading = true;
+  randomCharForSoftDelete = Math.floor(1000 + Math.random() * 9000);
+  toolTipTitle = 'You don\'t have permission';
 
   constructor(public auth: AuthService,
               public toast: ToastComponent,
@@ -34,6 +36,8 @@ export class AdminComponent implements OnInit {
   }
 
   deleteUser(user) {
+    user.email = user.email.concat(this.randomCharForSoftDelete);
+    user.username = user.username.concat(this.randomCharForSoftDelete);
     user.isDeleted = true;
     console.log(user);
     this.userService.softDeleteUser(user, this.auth.currentUser).subscribe(

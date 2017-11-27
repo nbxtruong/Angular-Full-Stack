@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Angular Full Stack</title>
@@ -9,7 +10,68 @@
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
+
 <body>
   <app-root>Loading...</app-root>
+  <script>
+    function sortTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("sortDoor");
+      switching = true;
+      dir = "asc";
+      while (switching) {
+        switching = false;
+        rows = table.getElementsByTagName("TR");
+        for (i = 0; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+          if (dir == "asc") {
+            if (n == 0 || n == 1 || n == 3) {
+              valueX = parseInt(x.innerHTML)
+              valueY = parseInt(y.innerHTML)
+              if (valueX > valueY) {
+
+                console.log(valueX, valueY);
+                shouldSwitch = true;
+                break;
+              }
+            } else {
+              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+
+          } else if (dir == "desc") {
+            if (n == 0 || n == 1 || n == 3) {
+              valueX = parseInt(x.innerHTML)
+              valueY = parseInt(y.innerHTML)
+              if (valueX < valueY) {
+                shouldSwitch = true;
+                break;
+              }
+            } else {
+              if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount++;
+        } else {
+          if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
+  </script>
 </body>
+
 </html>

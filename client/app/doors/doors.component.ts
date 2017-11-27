@@ -6,11 +6,17 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { DoorService } from '../services/door.service';
 import { ToastComponent } from '../shared/toast/toast.component';
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-doors',
   templateUrl: './doors.component.html',
   styleUrls: ['./doors.component.scss']
 })
+
+
+
 
 export class DoorsComponent implements OnInit {
 
@@ -146,5 +152,13 @@ export class DoorsComponent implements OnInit {
     }
     else
       return false;
+  }
+
+  // tslint:disable-next-line:one-line
+  searchDoors() {
+    const value = $('#myInput').val().toString().toLowerCase();
+    $('#myTable tr').filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
   }
 }

@@ -12,7 +12,17 @@
         <span class="input-group-addon"><i class="fa fa-key"></i></span>
         <input class="form-control" type="password" name="password" formControlName="password" placeholder="Password">
       </div>
-      <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid"><i class="fa fa-sign-in"></i> Login</button>
+      <div class="row">
+        <div class="col-sm-1">
+          <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">
+            <i class="fa fa-sign-in"></i> Login</button>
+        </div>
+        <div class="col-sm-3">
+          <div class="alert alert-danger" [hidden]="invalidAccount">
+            invalid email or password!
+          </div>
+        </div>
+      </div>
     </form>
   </div>
 </div>

@@ -22,16 +22,16 @@ describe('Component: App', () => {
       currentUser: { username: 'Tester' }
     };
     TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      providers: [{ provide: AuthService, useValue: authServiceStub }],
-      schemas: [NO_ERRORS_SCHEMA]
+      declarations: [ AppComponent ],
+      providers: [ { provide: AuthService, useValue: authServiceStub } ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
-      .compileComponents().then(() => {
-        fixture = TestBed.createComponent(AppComponent);
-        component = fixture.componentInstance;
-        authService = fixture.debugElement.injector.get(AuthService);
-        fixture.detectChanges();
-      });
+    .compileComponents().then(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      component = fixture.componentInstance;
+      authService = fixture.debugElement.injector.get(AuthService);
+      fixture.detectChanges();
+    });
   }));
 
   it('should create the app', async(() => {

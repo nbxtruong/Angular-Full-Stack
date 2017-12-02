@@ -143,11 +143,11 @@ export class DoorsComponent implements OnInit {
   }
 
   isStatusDoor(_door) {
-    if (_door.status === "Offline") {
+    if (_door.status === 'Offline') {
       return true;
-    }
-    else
+    } else {
       return false;
+    }
   }
 
   searchDoors() {

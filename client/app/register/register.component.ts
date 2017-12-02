@@ -72,5 +72,5 @@ export class RegisterComponent implements OnInit {
       error => this.toast.setMessage('email already exists', 'danger')
     );
   }
-  
+
 }

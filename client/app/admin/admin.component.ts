@@ -29,7 +29,7 @@ export class AdminComponent implements OnInit {
 
   getUsers() {
     this.userService.getUsers().subscribe(
-      data => { this.users = data; console.log(data) },
+      data => { this.users = data; console.log(data); },
       error => console.log(error),
       () => this.isLoading = false
     );
@@ -48,10 +48,10 @@ export class AdminComponent implements OnInit {
   }
 
   createGroup(groupID, groupName, groupDescription) {
-    var messageBody = {
-      "name": groupName,
-      "userData": groupDescription
-    }
+    const messageBody = {
+      'name': groupName,
+      'userData': groupDescription
+    };
 
     this.catService.createPersonGroup(groupID, messageBody).subscribe(
       res => {

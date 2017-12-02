@@ -14,7 +14,7 @@ import { ToastComponent } from '../shared/toast/toast.component';
 export class AddDoorComponent implements OnInit {
 
   addDoorForm: FormGroup;
-  statusDoor = "Offline";
+  statusDoor = 'Offline';
 
   lab = new FormControl('', [
     Validators.required,

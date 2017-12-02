@@ -8,7 +8,6 @@ import 'rxjs/add/operator/map';
 export class DoorService {
   private headers = new Headers({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
   private options = new RequestOptions({ headers: this.headers });
-  
   constructor(private http: Http) { }
 
   getDoors(): Observable<any> {

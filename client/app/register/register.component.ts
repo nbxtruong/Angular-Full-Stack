@@ -12,6 +12,7 @@ import { ToastComponent } from '../shared/toast/toast.component';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
+
   username = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
@@ -34,10 +35,20 @@ export class RegisterComponent implements OnInit {
     Validators.required
   ]);
 
+  setClassUsername() {
+    return { 'has-danger': !this.username.pristine && !this.username.valid };
+  }
+  setClassEmail() {
+    return { 'has-danger': !this.email.pristine && !this.email.valid };
+  }
+  setClassPassword() {
+    return { 'has-danger': !this.password.pristine && !this.password.valid };
+  }
+
   constructor(private formBuilder: FormBuilder,
-              private router: Router,
-              public toast: ToastComponent,
-              private userService: UserService) { }
+    private router: Router,
+    public toast: ToastComponent,
+    private userService: UserService) { }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -48,16 +59,6 @@ export class RegisterComponent implements OnInit {
       role: this.role,
       isDeleted: false
     });
-  }
-
-  setClassUsername() {
-    return { 'has-danger': !this.username.pristine && !this.username.valid };
-  }
-  setClassEmail() {
-    return { 'has-danger': !this.email.pristine && !this.email.valid };
-  }
-  setClassPassword() {
-    return { 'has-danger': !this.password.pristine && !this.password.valid };
   }
 
   register() {
@@ -71,4 +72,5 @@ export class RegisterComponent implements OnInit {
       error => this.toast.setMessage('email already exists', 'danger')
     );
   }
+  
 }

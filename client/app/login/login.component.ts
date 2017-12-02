@@ -12,6 +12,8 @@ import { ToastComponent } from '../shared/toast/toast.component';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  invalidAccount = true;
+
   username = new FormControl('', [
     Validators.required
   ]);
@@ -19,12 +21,18 @@ export class LoginComponent implements OnInit {
     Validators.required,
     Validators.minLength(8)
   ]);
-  invalidAccount = true;
+
+  setClassUsername() {
+    return { 'has-danger': !this.username.pristine && !this.username.valid };
+  }
+  setClassPassword() {
+    return { 'has-danger': !this.password.pristine && !this.password.valid };
+  }
 
   constructor(private auth: AuthService,
-              private formBuilder: FormBuilder,
-              private router: Router,
-              public toast: ToastComponent) { }
+    private formBuilder: FormBuilder,
+    private router: Router,
+    public toast: ToastComponent) { }
 
   ngOnInit() {
     if (this.auth.loggedIn) {
@@ -34,13 +42,6 @@ export class LoginComponent implements OnInit {
       username: this.username,
       password: this.password
     });
-  }
-
-  setClassUsername() {
-    return { 'has-danger': !this.username.pristine && !this.username.valid };
-  }
-  setClassPassword() {
-    return { 'has-danger': !this.password.pristine && !this.password.valid };
   }
 
   login() {

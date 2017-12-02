@@ -5,11 +5,15 @@
   <div class="card-block">
     <form [formGroup]="loginForm" (ngSubmit)="login()">
       <div class="input-group" [ngClass]="setClassUsername()">
-        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+        <span class="input-group-addon">
+          <i class="fa fa-envelope"></i>
+        </span>
         <input class="form-control" type="text" name="username" formControlName="username" placeholder="Username" autofocus>
       </div>
       <div class="input-group" [ngClass]="setClassPassword()">
-        <span class="input-group-addon"><i class="fa fa-key"></i></span>
+        <span class="input-group-addon">
+          <i class="fa fa-key"></i>
+        </span>
         <input class="form-control" type="password" name="password" formControlName="password" placeholder="Password">
       </div>
       <div class="row">

@@ -8,9 +8,7 @@ import { UserService } from '../services/user.service';
 export class AuthService {
   loggedIn = false;
   isAdmin = false;
-
   jwtHelper: JwtHelper = new JwtHelper();
-
   currentUser = { _id: '', username: '', role: '' };
 
   constructor(private userService: UserService,

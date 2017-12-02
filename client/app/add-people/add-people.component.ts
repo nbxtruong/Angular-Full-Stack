@@ -19,8 +19,9 @@ export class AddPeopleComponent implements OnInit {
   photoLimit = 40;
   takePhoto=false;
   countPhoto = 0;
-
+  randomUserID = Math.floor(1000 + Math.random() * 9000);
   addPeopleForm: FormGroup;
+
   userid = new FormControl('', []);
   username = new FormControl('', [
     Validators.required,
@@ -42,7 +43,27 @@ export class AddPeopleComponent implements OnInit {
     Validators.required
   ]);
 
-  randomUserID = Math.floor(1000 + Math.random() * 9000);
+  setClassUserid() {
+    return {
+      'has-danger': !this.userid.pristine && !this.userid.valid
+    };
+  }
+
+  setClassUsername() {
+    return {
+      'has-danger': !this.username.pristine && !this.username.valid
+    };
+  }
+  setClassName() {
+    return {
+      'has-danger': !this.name.pristine && !this.name.valid
+    };
+  }
+  setClassRoom() {
+    return {
+      'has-danger': !this.room.pristine && !this.room.valid
+    };
+  }
 
   // Options for webcam
   options = {
@@ -71,28 +92,6 @@ export class AddPeopleComponent implements OnInit {
       role: this.role
 
     });
-  }
-
-  setClassUserid() {
-    return {
-      'has-danger': !this.userid.pristine && !this.userid.valid
-    };
-  }
-
-  setClassUsername() {
-    return {
-      'has-danger': !this.username.pristine && !this.username.valid
-    };
-  }
-  setClassName() {
-    return {
-      'has-danger': !this.name.pristine && !this.name.valid
-    };
-  }
-  setClassRoom() {
-    return {
-      'has-danger': !this.room.pristine && !this.room.valid
-    };
   }
 
   isValidForm(){

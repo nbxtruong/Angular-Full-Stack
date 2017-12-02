@@ -15,9 +15,6 @@ declare var $: any;
   styleUrls: ['./doors.component.scss']
 })
 
-
-
-
 export class DoorsComponent implements OnInit {
 
   formDoor;
@@ -25,15 +22,8 @@ export class DoorsComponent implements OnInit {
   isLoading = true;
   isEditing = false;
   doorToDelete;
-
-  constructor(private doorService: DoorService,
-    private formBuilder: FormBuilder,
-    public toast: ToastComponent,
-    private router: Router,
-    private http: Http,
-    private requestOptions: RequestOptions) { }
-
   addDoorForm: FormGroup;
+
   lab = new FormControl('', [
     Validators.required,
   ]);
@@ -75,6 +65,13 @@ export class DoorsComponent implements OnInit {
       'has-danger': !this.mac.pristine && !this.mac.valid
     };
   }
+
+  constructor(private doorService: DoorService,
+    private formBuilder: FormBuilder,
+    public toast: ToastComponent,
+    private router: Router,
+    private http: Http,
+    private requestOptions: RequestOptions) { }
 
   ngOnInit() {
     this.getDoors();
@@ -143,7 +140,6 @@ export class DoorsComponent implements OnInit {
 
     );
     console.log(_door);
-
   }
 
   isStatusDoor(_door) {
@@ -154,11 +150,11 @@ export class DoorsComponent implements OnInit {
       return false;
   }
 
-  // tslint:disable-next-line:one-line
   searchDoors() {
     const value = $('#myInput').val().toString().toLowerCase();
     $('#myTable tr').filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
   }
+
 }

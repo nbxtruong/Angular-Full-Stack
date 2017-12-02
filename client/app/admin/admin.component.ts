@@ -18,10 +18,10 @@ export class AdminComponent implements OnInit {
   toolTipTitle = 'You don\'t have permission';
 
   constructor(public auth: AuthService,
-              public toast: ToastComponent,
-              private userService: UserService,
-              private catService: CatService,
-              private doorService: DoorService) { }
+    public toast: ToastComponent,
+    private userService: UserService,
+    private catService: CatService,
+    private doorService: DoorService) { }
 
   ngOnInit() {
     this.getUsers();
@@ -29,7 +29,7 @@ export class AdminComponent implements OnInit {
 
   getUsers() {
     this.userService.getUsers().subscribe(
-      data => {this.users = data; console.log(data)},
+      data => { this.users = data; console.log(data) },
       error => console.log(error),
       () => this.isLoading = false
     );

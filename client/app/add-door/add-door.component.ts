@@ -14,6 +14,7 @@ import { ToastComponent } from '../shared/toast/toast.component';
 export class AddDoorComponent implements OnInit {
 
   addDoorForm: FormGroup;
+  statusDoor = "Offline";
 
   lab = new FormControl('', [
     Validators.required,
@@ -37,24 +38,6 @@ export class AddDoorComponent implements OnInit {
     Validators.maxLength(17),
     Validators.pattern('([0-9A-F]{2}[:-]){5}([0-9A-F]{2})')
   ]);
-  statusDoor = "Offline";
-
-  constructor(private formBuilder: FormBuilder,
-    private router: Router,
-    public toast: ToastComponent,
-    private doorService: DoorService,
-    public http: Http) { }
-
-  ngOnInit() {
-    this.addDoorForm = this.formBuilder.group({
-      lab: this.lab,
-      block: this.block,
-      floor: this.floor,
-      door: this.door,
-      status: this.status,
-      mac: this.mac
-    });
-  }
 
   setClassFloor() {
     return {
@@ -72,6 +55,23 @@ export class AddDoorComponent implements OnInit {
     return {
       'has-danger': !this.mac.pristine && !this.mac.valid
     };
+  }
+
+  constructor(private formBuilder: FormBuilder,
+    private router: Router,
+    public toast: ToastComponent,
+    private doorService: DoorService,
+    public http: Http) { }
+
+  ngOnInit() {
+    this.addDoorForm = this.formBuilder.group({
+      lab: this.lab,
+      block: this.block,
+      floor: this.floor,
+      door: this.door,
+      status: this.status,
+      mac: this.mac
+    });
   }
 
   goBack() {

@@ -17,7 +17,7 @@ import { ToastComponent } from '../shared/toast/toast.component';
   pure: false
 })
 export class CatsComponent implements OnInit {
-  
+
   cat = {};
   myCat;
   cats = [];
@@ -27,15 +27,10 @@ export class CatsComponent implements OnInit {
   public webcam;//will be populated by ack-webcam [(ref)]
   PhotoTest;
   public base64;
-
-  addCatForm: FormGroup;
-  username = new FormControl('', Validators.required);
-  name = new FormControl('', Validators.required);
-  room = new FormControl('', Validators.required);
-  role = new FormControl('', Validators.required);
   searchFilter = 'userid';
   identifiedUser;
   filterModel;
+  addCatForm: FormGroup;
 
   searchCategory = [{
     id: 'userid',
@@ -53,6 +48,11 @@ export class CatsComponent implements OnInit {
     id: 'photo',
     value: 'Photo'
   }];
+
+  username = new FormControl('', Validators.required);
+  name = new FormControl('', Validators.required);
+  room = new FormControl('', Validators.required);
+  role = new FormControl('', Validators.required);
 
   // Options for webcam
   options = {
@@ -139,9 +139,9 @@ export class CatsComponent implements OnInit {
     );
   }
 
-  getFilter(f) {
-    this.searchFilter = f;
-  }
+  // getFilter(f) {
+  //   this.searchFilter = f;
+  // }
 
   searchPeopleByName() {
     console.log(this.searchFilter);
@@ -177,8 +177,8 @@ export class CatsComponent implements OnInit {
   }
 
   // Start photo prosessing
-  // Base64 Generation
   identify() {
+    // Base64 Generation
     this.webcam.getBase64()
       .then(base => {
         this.identifyAndUpdate(base);

@@ -11,13 +11,12 @@ dotenv.load({ path: '.env' });
 app.set('port', (process.env.PORT || 3000));
 
 app.use('/', express.static(path.join(__dirname, '../public')));
-app.use(bodyParser.json({limit: '16mb'}));
+app.use(bodyParser.json({ limit: '16mb' }));
 app.use(bodyParser.urlencoded({
-  limit:'16mb',
-  parameterLimit:12345678,
+  limit: '16mb',
+  parameterLimit: 12345678,
   extended: true
 }));
-
 
 let mongodbURI;
 if (process.env.NODE_ENV === 'test') {
@@ -36,8 +35,8 @@ mongodb
 
     app.use(cookieParser());
     setRoutes(app);
-    
-    app.get('/*', function(req, res) {
+
+    app.get('/*', function (req, res) {
       res.sendFile(path.join(__dirname, '../public/index.html'));
     });
     if (!module.parent) {
@@ -49,6 +48,6 @@ mongodb
   })
   .catch((err) => {
     console.error(err);
-});
+  });
 
 export { app };
